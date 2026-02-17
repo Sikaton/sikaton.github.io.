@@ -1,0 +1,1959 @@
+/* ============================================
+   STARGATE: CONQUEST — DarkOrbit VRU Style
+   Red/Crimson Military Sci-Fi HUD Theme
+   ============================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* VRU Color Palette - Dark Red Military */
+    --bg-void: #050508;
+    --bg-dark: #0a0a10;
+    --bg-panel: #0c0c14;
+    --bg-panel-hover: #10101c;
+    --bg-card: rgba(12, 12, 20, 0.9);
+
+    --red-primary: #cc1133;
+    --red-bright: #ff1a3d;
+    --red-glow: rgba(204, 17, 51, 0.4);
+    --red-dim: rgba(204, 17, 51, 0.15);
+    --red-dark: #880022;
+
+    --accent: #ff2244;
+    --accent-secondary: #ff6633;
+
+    --text-primary: #d0d0dc;
+    --text-secondary: #6a6a88;
+    --text-hud: #8888aa;
+    --text-mono: #ff4466;
+
+    --border-subtle: rgba(204, 17, 51, 0.12);
+    --border-medium: rgba(204, 17, 51, 0.25);
+    --border-bright: rgba(204, 17, 51, 0.5);
+
+    --tauri-color: #4499dd;
+    --tauri-glow: rgba(68, 153, 221, 0.3);
+    --wraith-color: #33dd88;
+    --wraith-glow: rgba(51, 221, 136, 0.3);
+    --goauld-color: #ddaa22;
+    --goauld-glow: rgba(221, 170, 34, 0.3);
+
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+
+    --corner-size: 12px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-void);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+    cursor: default;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+::selection {
+    background: var(--red-primary);
+    color: white;
+}
+
+/* --- Scanline Overlay --- */
+.scanline-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+    );
+}
+
+/* --- HUD Screen Corners --- */
+.hud-corner {
+    position: fixed;
+    z-index: 9998;
+    pointer-events: none;
+}
+
+.hud-tl, .hud-tr, .hud-bl, .hud-br {
+    width: 60px;
+    height: 60px;
+}
+
+.hud-tl {
+    top: 8px;
+    left: 8px;
+    border-top: 2px solid var(--red-primary);
+    border-left: 2px solid var(--red-primary);
+}
+
+.hud-tr {
+    top: 8px;
+    right: 8px;
+    border-top: 2px solid var(--red-primary);
+    border-right: 2px solid var(--red-primary);
+}
+
+.hud-bl {
+    bottom: 8px;
+    left: 8px;
+    border-bottom: 2px solid var(--red-primary);
+    border-left: 2px solid var(--red-primary);
+}
+
+.hud-br {
+    bottom: 8px;
+    right: 8px;
+    border-bottom: 2px solid var(--red-primary);
+    border-right: 2px solid var(--red-primary);
+}
+
+/* --- Navigation --- */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(5, 5, 8, 0.85);
+    backdrop-filter: blur(12px);
+    transition: all 0.4s ease;
+}
+
+.nav.scrolled {
+    background: rgba(5, 5, 8, 0.95);
+    box-shadow: 0 4px 30px rgba(204, 17, 51, 0.1);
+}
+
+.nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.nav-border-bottom {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red-primary), transparent);
+    opacity: 0.4;
+}
+
+/* Logo */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.nav-logo-hex {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hex-svg {
+    width: 100%;
+    height: 100%;
+    color: var(--red-primary);
+}
+
+.nav-logo-sg {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: var(--red-bright);
+    letter-spacing: 1px;
+}
+
+.nav-logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.nav-logo-title {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 3px;
+}
+
+.nav-logo-sub {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--red-primary);
+    letter-spacing: 4px;
+    margin-top: 2px;
+}
+
+/* Nav Status */
+.nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--red-bright);
+    border-radius: 50%;
+    animation: status-blink 2s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--red-glow);
+}
+
+.status-text {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-hud);
+    letter-spacing: 2px;
+}
+
+/* Nav Links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.3rem;
+}
+
+.nav-links a {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    padding: 0.5rem 1.2rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    background: transparent;
+}
+
+.nav-links a:hover {
+    color: var(--red-bright);
+    background: var(--red-dim);
+    border-color: var(--border-medium);
+}
+
+/* --- Hero Banner --- */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-video-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5) saturate(0.6) hue-rotate(-10deg);
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg,
+            rgba(5,5,8,0.7) 0%,
+            rgba(5,5,8,0.3) 30%,
+            rgba(5,5,8,0.3) 60%,
+            rgba(5,5,8,0.9) 85%,
+            rgba(5,5,8,1) 100%
+        ),
+        radial-gradient(ellipse at center, transparent 20%, rgba(5,5,8,0.6) 100%);
+}
+
+.hero-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(204, 17, 51, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(204, 17, 51, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: grid-shift 20s linear infinite;
+}
+
+/* --- Hero HUD Left Panel --- */
+.hero-hud-left {
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.hud-block {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.8rem;
+    border-left: 2px solid var(--red-dim);
+    min-width: 120px;
+}
+
+.hud-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+}
+
+.hud-value {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-hud);
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.hud-value-red {
+    color: var(--red-bright);
+    text-shadow: 0 0 8px var(--red-glow);
+    animation: status-blink 3s ease-in-out infinite;
+}
+
+.hud-value-green {
+    color: #33dd88;
+    text-shadow: 0 0 8px rgba(51, 221, 136, 0.4);
+}
+
+/* --- Hero HUD Right - Minimap --- */
+.hero-hud-right {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
+.hud-minimap {
+    width: 130px;
+    height: 130px;
+    position: relative;
+    border: 1px solid var(--border-medium);
+    border-radius: 50%;
+    background: rgba(5, 5, 8, 0.6);
+}
+
+.minimap-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.minimap-ring-1 { width: 80%; height: 80%; }
+.minimap-ring-2 { width: 55%; height: 55%; }
+.minimap-ring-3 { width: 30%; height: 30%; }
+
+.minimap-dot {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: minimap-blink 3s ease-in-out infinite;
+}
+
+.minimap-dot-1 { top: 25%; left: 60%; background: var(--tauri-color); animation-delay: 0s; }
+.minimap-dot-2 { top: 65%; left: 30%; background: var(--wraith-color); animation-delay: 0.8s; }
+.minimap-dot-3 { top: 40%; left: 75%; background: var(--goauld-color); animation-delay: 1.5s; }
+
+.minimap-dot-self {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: var(--red-bright);
+    box-shadow: 0 0 10px var(--red-glow);
+    animation: none;
+}
+
+.minimap-sweep {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--red-bright), transparent);
+    transform-origin: left center;
+    animation: radar-sweep 4s linear infinite;
+    opacity: 0.5;
+}
+
+/* --- Hero Content --- */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Emblem */
+.hero-emblem {
+    margin-bottom: 2rem;
+}
+
+.emblem-outer {
+    width: 140px;
+    height: 140px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emblem-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--border-medium);
+    animation: spin-slow 30s linear infinite;
+}
+
+.emblem-ring::before,
+.emblem-ring::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--red-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--red-glow);
+}
+
+.emblem-ring::before { top: -4px; left: 50%; transform: translateX(-50%); }
+.emblem-ring::after { bottom: -4px; left: 50%; transform: translateX(-50%); }
+
+.emblem-hex {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emblem-hex-svg {
+    width: 100%;
+    height: 100%;
+    color: var(--red-primary);
+    opacity: 0.5;
+    animation: spin-slow 25s linear infinite reverse;
+}
+
+.emblem-inner-ring {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--red-primary);
+    box-shadow: 0 0 20px var(--red-glow), inset 0 0 20px var(--red-glow);
+    animation: emblem-pulse 3s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(204, 17, 51, 0.15), transparent 70%);
+}
+
+.emblem-chevrons {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+}
+
+.e-chev {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--red-bright);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    filter: drop-shadow(0 0 4px var(--red-glow));
+}
+
+.e-chev-1 { top: -3px; left: 50%; transform: translateX(-50%); }
+.e-chev-2 { top: 20%; right: 2%; transform: rotate(60deg); }
+.e-chev-3 { bottom: 20%; right: 2%; transform: rotate(120deg); }
+.e-chev-4 { bottom: -3px; left: 50%; transform: translateX(-50%) rotate(180deg); }
+.e-chev-5 { bottom: 20%; left: 2%; transform: rotate(-120deg); }
+.e-chev-6 { top: 20%; left: 2%; transform: rotate(-60deg); }
+
+/* Hero Text */
+.hero-text-block {
+    max-width: 700px;
+}
+
+.hero-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tag-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red-primary));
+}
+
+.tag-line:last-child {
+    background: linear-gradient(90deg, var(--red-primary), transparent);
+}
+
+.tag-text {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    letter-spacing: 4px;
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: 8px;
+    line-height: 1.05;
+    color: var(--text-primary);
+    text-shadow: 0 0 60px var(--red-glow);
+}
+
+.hero-colon {
+    color: var(--red-bright);
+    text-shadow: 0 0 20px var(--red-glow);
+}
+
+.hero-title-conquest {
+    background: linear-gradient(180deg, var(--red-bright) 0%, var(--red-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px var(--red-glow));
+}
+
+.hero-desc {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    letter-spacing: 1px;
+    line-height: 1.8;
+}
+
+/* Hero Buttons */
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    justify-content: center;
+}
+
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.8rem 2rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+    color: white;
+    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+    padding: 0.8rem 2.5rem;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--red-bright), var(--red-primary));
+    box-shadow: 0 0 30px var(--red-glow);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-medium);
+    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+    padding: 0.8rem 2.5rem;
+}
+
+.btn-secondary:hover {
+    color: var(--red-bright);
+    border-color: var(--red-primary);
+    background: var(--red-dim);
+}
+
+/* Corner decorations for buttons */
+.btn-corner {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-color: var(--red-bright);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn:hover .btn-corner { opacity: 1; }
+
+/* --- Hero Bottom Bar --- */
+.hero-bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.6rem 2rem;
+    background: rgba(5, 5, 8, 0.8);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.bottom-bar-segment {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.bar-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+}
+
+.bar-value {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-hud);
+}
+
+.bottom-bar-progress {
+    flex: 1;
+    height: 3px;
+    background: var(--bg-panel);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.bar-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--red-primary), var(--red-bright));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px var(--red-glow);
+}
+
+/* --- Section Header --- */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.section-header-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-medium), transparent);
+}
+
+.section-header-content {
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.section-header-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--text-primary);
+}
+
+/* --- Factions Section --- */
+.factions {
+    padding: 6rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.factions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+/* --- Faction Card --- */
+.faction-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+
+.faction-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red-primary), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 5;
+}
+
+.faction-card:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 30px var(--red-dim);
+}
+
+.faction-card:hover::before {
+    opacity: 1;
+}
+
+/* Card corners */
+.card-border {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.card-corner {
+    position: absolute;
+    width: var(--corner-size);
+    height: var(--corner-size);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.faction-card:hover .card-corner { opacity: 1; }
+
+.card-corner-tl { top: 4px; left: 4px; border-top: 1px solid var(--red-bright); border-left: 1px solid var(--red-bright); }
+.card-corner-tr { top: 4px; right: 4px; border-top: 1px solid var(--red-bright); border-right: 1px solid var(--red-bright); }
+.card-corner-bl { bottom: 4px; left: 4px; border-bottom: 1px solid var(--red-bright); border-left: 1px solid var(--red-bright); }
+.card-corner-br { bottom: 4px; right: 4px; border-bottom: 1px solid var(--red-bright); border-right: 1px solid var(--red-bright); }
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.6rem 1.2rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.card-header-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+}
+
+.card-id {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+}
+
+.card-status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red-primary);
+    animation: status-blink 3s ease-in-out infinite;
+}
+
+/* Faction Visual */
+.faction-visual {
+    height: 220px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at center, var(--red-dim) 0%, transparent 60%),
+        var(--bg-panel);
+}
+
+/* Card with full-bleed video background */
+.faction-card-video {
+    position: relative;
+}
+
+.card-video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    border: none;
+    object-fit: cover;
+}
+
+.card-video-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        radial-gradient(circle at center, rgba(5, 5, 8, 0.15) 0%, rgba(5, 5, 8, 0.55) 100%),
+        linear-gradient(180deg, rgba(5, 5, 8, 0.1) 0%, rgba(5, 5, 8, 0.6) 100%);
+    pointer-events: none;
+}
+
+.faction-card-video .card-border,
+.faction-card-video .card-header,
+.faction-card-video .faction-visual,
+.faction-card-video .faction-info {
+    position: relative;
+    z-index: 2;
+}
+
+.faction-card-video .faction-visual {
+    background: transparent;
+}
+
+.faction-card-video .faction-info {
+    background: rgba(5, 5, 8, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.faction-card-video .card-header {
+    background: rgba(5, 5, 8, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.faction-hex-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image:
+        linear-gradient(30deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%, var(--red-primary)),
+        linear-gradient(150deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%, var(--red-primary)),
+        linear-gradient(30deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%, var(--red-primary)),
+        linear-gradient(150deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%, var(--red-primary)),
+        linear-gradient(60deg, rgba(204,17,51,0.5) 25%, transparent 25.5%, transparent 75%, rgba(204,17,51,0.5) 75%, rgba(204,17,51,0.5)),
+        linear-gradient(60deg, rgba(204,17,51,0.5) 25%, transparent 25.5%, transparent 75%, rgba(204,17,51,0.5) 75%, rgba(204,17,51,0.5));
+    background-size: 40px 70px;
+    background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+}
+
+.faction-bg-shape {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.faction-glow {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.2;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+.faction-card:hover .faction-glow { opacity: 0.4; }
+
+/* --- TAURI Shape --- */
+.faction-tauri {
+    background: url('/newproject/pozadie-tauri.png') center/cover no-repeat !important;
+    border-color: rgba(68, 153, 221, 0.3);
+    position: relative;
+}
+
+.faction-tauri::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.faction-tauri::before {
+    background: linear-gradient(90deg, transparent, var(--tauri-color), transparent);
+    z-index: 5;
+}
+
+.faction-tauri:hover {
+    border-color: rgba(68, 153, 221, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(68, 153, 221, 0.2);
+}
+
+.faction-tauri .card-header {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    position: relative;
+    z-index: 1;
+}
+
+.faction-tauri .faction-info {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    position: relative;
+    z-index: 1;
+}
+
+.faction-tauri .faction-visual {
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.faction-tauri .card-border {
+    position: relative;
+    z-index: 6;
+}
+
+.faction-tauri .card-status-indicator { background: var(--tauri-color); }
+
+/* Tauri Emblem Image */
+.tauri-visual-emblem {
+    background: transparent !important;
+}
+
+.tauri-emblem-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: 75%;
+    max-width: 85%;
+    object-fit: contain;
+    z-index: 2;
+    filter: drop-shadow(0 0 20px rgba(68, 153, 221, 0.3));
+    animation: emblem-glow 4s ease-in-out infinite;
+}
+
+.tauri-emblem-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at center, transparent 30%, rgba(5, 5, 8, 0.3) 100%);
+    pointer-events: none;
+}
+
+.tauri-visual-emblem .faction-hex-pattern {
+    z-index: 0;
+    opacity: 0.02;
+}
+
+@keyframes emblem-glow {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(68, 153, 221, 0.3)); }
+    50% { filter: drop-shadow(0 0 35px rgba(68, 153, 221, 0.5)); }
+}
+
+/* --- WRAITH Background --- */
+.faction-wraith {
+    background: url('/newproject/pozadie_wraith.png') center/cover no-repeat !important;
+    border-color: rgba(51, 221, 136, 0.3);
+    position: relative;
+}
+
+.faction-wraith::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.faction-wraith::before {
+    background: linear-gradient(90deg, transparent, var(--wraith-color), transparent);
+    z-index: 5;
+}
+
+.faction-wraith:hover {
+    border-color: rgba(51, 221, 136, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(51, 221, 136, 0.2);
+}
+
+.faction-wraith .card-header {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    position: relative;
+    z-index: 1;
+}
+
+.faction-wraith .faction-info {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    position: relative;
+    z-index: 1;
+}
+
+.faction-wraith .faction-visual {
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.faction-wraith .card-border {
+    position: relative;
+    z-index: 6;
+}
+
+.faction-wraith .card-status-indicator { background: var(--wraith-color); }
+
+/* Wraith Emblem Image */
+.wraith-visual-emblem {
+    background: transparent !important;
+}
+
+.wraith-emblem-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: 75.2%;
+    max-width: 85.1%;
+    object-fit: contain;
+    z-index: 2;
+    filter: drop-shadow(0 0 20px rgba(51, 221, 136, 0.3));
+    animation: wraith-emblem-glow 4s ease-in-out infinite;
+}
+
+.wraith-emblem-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at center, transparent 30%, rgba(5, 5, 8, 0.3) 100%);
+    pointer-events: none;
+}
+
+.wraith-visual-emblem .faction-hex-pattern {
+    z-index: 0;
+    opacity: 0.02;
+}
+
+@keyframes wraith-emblem-glow {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(51, 221, 136, 0.3)); }
+    50% { filter: drop-shadow(0 0 35px rgba(51, 221, 136, 0.5)); }
+}
+
+/* --- GOA'ULD Background --- */
+.faction-goauld {
+    background: url('/newproject/goauld_pozadie.png') center/cover no-repeat !important;
+    border-color: rgba(221, 170, 34, 0.3);
+    position: relative;
+}
+
+.faction-goauld::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.faction-goauld::before {
+    background: linear-gradient(90deg, transparent, var(--goauld-color), transparent);
+    z-index: 5;
+}
+
+.faction-goauld:hover {
+    border-color: rgba(221, 170, 34, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(221, 170, 34, 0.2);
+}
+
+.faction-goauld .card-header {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    position: relative;
+    z-index: 1;
+}
+
+.faction-goauld .faction-info {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    position: relative;
+    z-index: 1;
+}
+
+.faction-goauld .faction-visual {
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.faction-goauld .card-border {
+    position: relative;
+    z-index: 6;
+}
+
+.faction-goauld .card-status-indicator { background: var(--goauld-color); }
+
+/* Goa'uld Emblem Image */
+.goauld-visual-emblem {
+    background: transparent !important;
+}
+
+.goauld-emblem-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: 75%;
+    max-width: 85%;
+    object-fit: contain;
+    z-index: 2;
+    filter: drop-shadow(0 0 20px rgba(221, 170, 34, 0.3));
+    animation: goauld-emblem-glow 4s ease-in-out infinite;
+}
+
+.goauld-emblem-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at center, transparent 30%, rgba(5, 5, 8, 0.3) 100%);
+    pointer-events: none;
+}
+
+.goauld-visual-emblem .faction-hex-pattern {
+    z-index: 0;
+    opacity: 0.02;
+}
+
+@keyframes goauld-emblem-glow {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(221, 170, 34, 0.3)); }
+    50% { filter: drop-shadow(0 0 35px rgba(221, 170, 34, 0.5)); }
+}
+
+.tauri-shape { animation: float 6s ease-in-out infinite; }
+
+.tauri-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid var(--tauri-color);
+}
+
+.tauri-ring-1 {
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    animation: spin-slow 18s linear infinite;
+    border-style: dashed;
+    border-width: 1px;
+}
+
+.tauri-ring-2 {
+    width: 72%;
+    height: 72%;
+    opacity: 0.6;
+    animation: spin-slow 12s linear infinite reverse;
+}
+
+.tauri-ring-3 {
+    width: 44%;
+    height: 44%;
+    opacity: 0.3;
+    animation: spin-slow 7s linear infinite;
+    border-style: dotted;
+}
+
+.tauri-core {
+    width: 16px;
+    height: 16px;
+    background: var(--tauri-color);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--tauri-glow), 0 0 40px var(--tauri-glow);
+    animation: core-pulse 2.5s ease-in-out infinite;
+    z-index: 3;
+}
+
+.tauri-crosshair {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    z-index: 2;
+}
+
+.tauri-crosshair::before,
+.tauri-crosshair::after {
+    content: '';
+    position: absolute;
+    background: var(--tauri-color);
+    opacity: 0.3;
+}
+
+.tauri-crosshair::before {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+}
+
+.tauri-crosshair::after {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+}
+
+.tauri-glow { background: var(--tauri-color); }
+
+/* --- WRAITH Shape --- */
+.wraith-shape { animation: float 6s ease-in-out infinite 1s; }
+
+.wraith-tendril {
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(to top, transparent, var(--wraith-color));
+    border-radius: 2px;
+    transform-origin: bottom center;
+    opacity: 0.6;
+}
+
+.wraith-tendril-1 { height: 65px; top: -5px; left: 50%; transform: translateX(-50%) rotate(-12deg); animation: tendril-sway 4s ease-in-out infinite; --base-rotation: -12deg; }
+.wraith-tendril-2 { height: 55px; top: 5px; right: 18px; transform: rotate(22deg); animation: tendril-sway 4s ease-in-out infinite 0.4s; --base-rotation: 22deg; }
+.wraith-tendril-3 { height: 50px; top: 10px; left: 18px; transform: rotate(-28deg); animation: tendril-sway 4s ease-in-out infinite 0.8s; --base-rotation: -28deg; }
+.wraith-tendril-4 { height: 40px; top: 20px; right: 32px; transform: rotate(12deg); animation: tendril-sway 4s ease-in-out infinite 1.2s; --base-rotation: 12deg; }
+.wraith-tendril-5 { height: 35px; top: 25px; left: 32px; transform: rotate(-8deg); animation: tendril-sway 4s ease-in-out infinite 1.6s; --base-rotation: -8deg; }
+
+.wraith-core {
+    width: 45px;
+    height: 65px;
+    background: radial-gradient(ellipse, var(--wraith-color) 0%, #6633aa 55%, transparent 100%);
+    border-radius: 50% 50% 40% 40%;
+    opacity: 0.6;
+    box-shadow: 0 0 30px var(--wraith-glow);
+    animation: core-pulse 3s ease-in-out infinite;
+    position: relative;
+    z-index: 3;
+}
+
+.wraith-core::before {
+    content: '';
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--wraith-color);
+    animation: blink 4s ease-in-out infinite;
+}
+
+.wraith-glow { background: var(--wraith-color); }
+
+/* --- GOA'ULD Shape --- */
+.goauld-shape { animation: float 6s ease-in-out infinite 2s; }
+
+.goauld-pyramid {
+    width: 90px;
+    height: 90px;
+    position: relative;
+    animation: spin-slow 25s linear infinite;
+}
+
+.goauld-pyramid-side {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.goauld-side-1 {
+    bottom: 8px; left: 50%; transform: translateX(-50%);
+    border-left: 42px solid transparent;
+    border-right: 42px solid transparent;
+    border-bottom: 75px solid rgba(221, 170, 34, 0.2);
+}
+
+.goauld-side-2 {
+    bottom: 8px; left: 50%; transform: translateX(-50%);
+    border-left: 32px solid transparent;
+    border-right: 32px solid transparent;
+    border-bottom: 58px solid rgba(221, 170, 34, 0.15);
+}
+
+.goauld-side-3 {
+    bottom: 8px; left: 50%; transform: translateX(-50%);
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-bottom: 42px solid rgba(221, 170, 34, 0.1);
+}
+
+.goauld-eye {
+    position: absolute;
+    width: 16px;
+    height: 9px;
+    border: 2px solid var(--goauld-color);
+    border-radius: 50%;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px var(--goauld-color), 0 0 30px var(--goauld-glow);
+    animation: eye-glow 3s ease-in-out infinite;
+    z-index: 3;
+}
+
+.goauld-eye::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 5px; height: 5px;
+    background: var(--goauld-color);
+    border-radius: 50%;
+}
+
+.goauld-beam {
+    position: absolute;
+    width: 1px;
+    height: 40px;
+    top: 48%;
+    background: linear-gradient(to bottom, var(--goauld-color), transparent);
+    opacity: 0.3;
+}
+
+.goauld-beam-l { left: 35%; transform: rotate(-15deg); }
+.goauld-beam-r { right: 35%; transform: rotate(15deg); }
+
+.goauld-glow { background: var(--goauld-color); }
+
+/* --- Faction Info --- */
+.faction-info {
+    padding: 1.2rem 1.5rem 1.5rem;
+}
+
+.faction-name-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.faction-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.faction-icon svg { width: 100%; height: 100%; }
+
+.faction-tauri .faction-icon { color: var(--tauri-color); }
+.faction-wraith .faction-icon { color: var(--wraith-color); }
+.faction-goauld .faction-icon { color: var(--goauld-color); }
+
+.faction-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+}
+
+.faction-tauri .faction-name { color: var(--tauri-color); }
+.faction-wraith .faction-name { color: var(--wraith-color); }
+.faction-goauld .faction-name { color: var(--goauld-color); }
+
+.faction-divider {
+    height: 1px;
+    margin: 0.8rem 0;
+    background: var(--border-subtle);
+}
+
+.faction-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+/* Stat Bars */
+.faction-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    width: 60px;
+    flex-shrink: 0;
+}
+
+.stat-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    transition: width 1s ease;
+}
+
+.faction-tauri .stat-fill { background: linear-gradient(90deg, var(--tauri-color), rgba(68, 153, 221, 0.3)); box-shadow: 0 0 6px var(--tauri-glow); }
+.faction-wraith .stat-fill { background: linear-gradient(90deg, var(--wraith-color), rgba(51, 221, 136, 0.3)); box-shadow: 0 0 6px var(--wraith-glow); }
+.faction-goauld .stat-fill { background: linear-gradient(90deg, var(--goauld-color), rgba(221, 170, 34, 0.3)); box-shadow: 0 0 6px var(--goauld-glow); }
+
+/* Traits */
+.faction-traits {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+.faction-traits li {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.trait-marker {
+    width: 4px;
+    height: 4px;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.faction-tauri .trait-marker { background: var(--tauri-color); box-shadow: 0 0 4px var(--tauri-glow); }
+.faction-wraith .trait-marker { background: var(--wraith-color); box-shadow: 0 0 4px var(--wraith-glow); }
+.faction-goauld .trait-marker { background: var(--goauld-color); box-shadow: 0 0 4px var(--goauld-glow); }
+
+/* Card Select Button */
+.card-select-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+
+.card-select-btn:hover {
+    color: var(--red-bright);
+    border-color: var(--red-primary);
+    background: var(--red-dim);
+}
+
+.select-arrow {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.card-select-btn:hover .select-arrow {
+    transform: translateX(4px);
+}
+
+/* --- Download Section --- */
+.download {
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.download-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.hex-grid-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image:
+        linear-gradient(30deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%),
+        linear-gradient(150deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%),
+        linear-gradient(30deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%),
+        linear-gradient(150deg, var(--red-primary) 12%, transparent 12.5%, transparent 87%, var(--red-primary) 87.5%),
+        linear-gradient(60deg, rgba(204,17,51,0.5) 25%, transparent 25.5%, transparent 75%, rgba(204,17,51,0.5) 75%),
+        linear-gradient(60deg, rgba(204,17,51,0.5) 25%, transparent 25.5%, transparent 75%, rgba(204,17,51,0.5) 75%);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+}
+
+.download-panel {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-medium);
+    text-align: center;
+    clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));
+}
+
+.panel-border {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.panel-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+}
+
+.panel-corner-tl { top: 6px; left: 6px; border-top: 1px solid var(--red-bright); border-left: 1px solid var(--red-bright); }
+.panel-corner-tr { top: 6px; right: 6px; border-top: 1px solid var(--red-bright); border-right: 1px solid var(--red-bright); }
+.panel-corner-bl { bottom: 6px; left: 6px; border-bottom: 1px solid var(--red-bright); border-left: 1px solid var(--red-bright); }
+.panel-corner-br { bottom: 6px; right: 6px; border-bottom: 1px solid var(--red-bright); border-right: 1px solid var(--red-bright); }
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.panel-header-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+}
+
+.panel-header-tag {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-secondary);
+    letter-spacing: 3px;
+    white-space: nowrap;
+}
+
+.download-title {
+    margin-bottom: 2rem;
+}
+
+.download-title::after {
+    display: none;
+}
+
+.download-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dl-info-block {
+    display: flex;
+    flex-direction: column;
+    padding: 0.6rem;
+    border: 1px solid var(--border-subtle);
+    text-align: center;
+}
+
+.dl-info-label {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin-bottom: 0.3rem;
+}
+
+.dl-info-value {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+}
+
+.dl-info-active {
+    color: var(--red-bright);
+    animation: status-blink 2s ease-in-out infinite;
+}
+
+.btn-download {
+    background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+    color: white;
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    padding: 1rem 3rem;
+    font-size: 0.75rem;
+    width: auto;
+    display: inline-flex;
+    margin: 0 auto;
+}
+
+.btn-download:hover {
+    background: linear-gradient(135deg, var(--red-bright), var(--red-primary));
+    box-shadow: 0 0 40px var(--red-glow);
+    transform: translateY(-2px);
+}
+
+.download-btn-icon {
+    font-size: 0.7rem;
+}
+
+.download-note {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* --- Footer --- */
+.footer {
+    padding: 0 2rem 1.5rem;
+}
+
+.footer-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-medium), transparent);
+    margin-bottom: 1.5rem;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.footer-brand {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--red-primary);
+    letter-spacing: 3px;
+}
+
+.footer-copy {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+}
+
+.footer-disclaimer {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+}
+
+.footer-status {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.status-dot-sm {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: #33dd88;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(51, 221, 136, 0.5);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes core-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes emblem-pulse {
+    0%, 100% { box-shadow: 0 0 20px var(--red-glow), inset 0 0 20px var(--red-glow); }
+    50% { box-shadow: 0 0 40px var(--red-glow), inset 0 0 35px var(--red-glow); }
+}
+
+@keyframes status-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes minimap-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.6); }
+}
+
+@keyframes radar-sweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes tendril-sway {
+    0%, 100% { transform: rotate(var(--base-rotation, 0deg)); }
+    50% { transform: rotate(calc(var(--base-rotation, 0deg) + 8deg)); }
+}
+
+@keyframes blink {
+    0%, 40%, 60%, 100% { opacity: 1; }
+    50% { opacity: 0.15; }
+}
+
+@keyframes eye-glow {
+    0%, 100% { box-shadow: 0 0 15px var(--goauld-color), 0 0 30px var(--goauld-glow); }
+    50% { box-shadow: 0 0 25px var(--goauld-color), 0 0 50px var(--goauld-glow); }
+}
+
+@keyframes grid-shift {
+    from { transform: translateY(0); }
+    to { transform: translateY(60px); }
+}
+
+/* Scroll reveal */
+.faction-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.faction-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.faction-card:nth-child(2) { transition-delay: 0.12s; }
+.faction-card:nth-child(3) { transition-delay: 0.24s; }
+
+.download-panel {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.download-panel.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1100px) {
+    .factions-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .faction-card:nth-child(2),
+    .faction-card:nth-child(3) { transition-delay: 0s; }
+
+    .hero-hud-left,
+    .hero-hud-right {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-inner {
+        padding: 0.6rem 1rem;
+    }
+
+    .nav-center { display: none; }
+
+    .nav-links { gap: 0.2rem; }
+    .nav-links a {
+        font-size: 0.55rem;
+        padding: 0.4rem 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    .hero-title {
+        letter-spacing: 4px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .factions {
+        padding: 4rem 1rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .section-header-line { display: none; }
+
+    .download-panel {
+        padding: 2rem 1.5rem;
+        clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    }
+
+    .download-info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+    }
+
+    .hud-corner { display: none; }
+}
+
+@media (max-width: 480px) {
+    .nav-logo-text { display: none; }
+
+    .hero-emblem { margin-bottom: 1.5rem; }
+
+    .emblem-outer {
+        width: 100px;
+        height: 100px;
+    }
+
+    .emblem-inner-ring {
+        width: 36px;
+        height: 36px;
+    }
+
+    .faction-info { padding: 1rem 1.2rem 1.2rem; }
+
+    .hero-bottom-bar {
+        gap: 0.8rem;
+        padding: 0.5rem 1rem;
+        overflow-x: auto;
+    }
+}
